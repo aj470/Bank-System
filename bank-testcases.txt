@@ -1,0 +1,28 @@
+Test0: basic account mechanics
+   - Add 1 account, make sure server prints initial values, then modify account and make sure server prints updated values
+   - Close client session and make sure server still prints account values
+   - Reopen session, modify account and make sure server still prints account values
+   - Open new client shell and try to open same account, server should say no
+   - Close session in first client, but keep client shell open and then try to open account in second client, server should say yes
+   - Modify values, make sure server prints them
+   - Remove account from second client shell
+   - Try to access account from first shell, server should say no such account
+Test1: test debit/credit commands
+-	Add 1 account, attempt to debit without crediting. Server should say no.
+-	Credit account, make sure server prints updated balance
+-	Debit account, make sure server prints appropriate balance
+-	Debit account more than credit available, server should say no
+Test2: Multiple clients
+-	Add 1 account, start session and attempt to open another account. Server should say no
+-	Create another account and start session with new account in a second shell.
+-	Attempt to start session with first account, server should say no.
+-	Attempt to open account while in session
+-	Use debit/credit commands with both accounts in two different shells. Check server printout for appropriate output.
+Test3: Fill server to 20 account limit
+-	Add 20 accounts to server, check server printout.
+-	Attempt to add another account, server should say account limit is reached.
+Test4: Client exits when server shuts down
+-	Connect client to server.
+-	Shut down server, client should be disconnected from server.
+Test5: attempt to connect without host name
+-	Attempt to connect with incorrect/no host name

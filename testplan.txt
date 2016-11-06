@@ -1,0 +1,139 @@
+(">" == message to server, "<" == message from server)
+
+Test0: basic account mechanics
+./server, ./client localhost
+Client0:
+>open JAF
+<account created, starting session
+>credit 10
+>debit 5
+>finish
+<ending session
+>start JAF
+<starting session
+Client1:
+>start JAF
+<account already in session
+Client0:
+>finish
+<ending session
+Client1:
+>start JAF
+<starting session
+>credit 10000
+>exit
+<disconnecting from server
+
+
+Server:
+Account Log
+JAF		10.00		ACTIVE
+
+JAF		5.00		ACTIVE
+
+JAF		5.00		INACTIVE
+
+JAF		5.00		ACTIVE
+
+JAF		10005.00	ACTIVE
+
+JAF		10005.00	INACTIVE
+
+Test1: test debit/credit commands
+./server, ./client localhost
+Client0:
+>open JAF
+<account created, starting session
+>debit 10
+<insufficient funds
+>credit 1000
+>debit 450
+>debit 551
+<insufficient funds
+>exit
+<disconnecting from server
+
+Server:
+JAF		0.00		ACTIVE
+
+JAF		1000.00	ACTIVE
+
+JAF		550.00		ACTIVE
+
+JAF		550.00		INACTIVE
+
+Test2: Multiple client
+./server, ./client localhost
+Client0:
+>open JAF
+<account created, starting session
+>finish
+<ending session
+Client1:
+>open test
+<account created, starting session
+>start JAF
+<invalid command while in session
+>credit 100
+Client0:
+>start JAF
+<starting session
+>credit 6709
+>open anotherone
+<invalid command while in session
+
+Server:
+JAF		0.00		ACTIVE
+
+JAF		0.00		INACTIVE
+test		0.00		ACTIVE
+
+JAF		6709.00	ACTIVE
+test		100.00		ACTIVE
+
+Test3: Fill server to 20 account limit
+./server, ./client localhost
+Client0:
+>open client0
+<account created, starting session
+.
+.
+.
+Client20:
+>open client20
+<account created, starting session
+Client21:
+>open client21
+<account limit has already been reached
+
+Server:
+Client0		0.00		ACTIVE
+.
+.
+.
+Client20		0.00		ACTIVE
+
+Test4: Client exits when server shuts down
+./server, ./client localhost
+Client0:
+>open JAF
+<account created, starting session
+<disconnected from server
+
+Server:
+JAF		0.00		ACTIVE
+Ctrl+C
+
+Test5: attempt to connect without host name
+./server, ./client
+<error locating host
+
+
+
+
+
+
+
+
+
+
